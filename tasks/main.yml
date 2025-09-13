@@ -1,21 +1,24 @@
 ---
 - name: import OS specific variables
-  ansible.builtin.include_vars:
-    "{{ ansible_os_family.yml }}"
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
 
 - name: check assertions
   ansible.builtin.include_tasks: asserts.yml
 
 - name: ensure the python environment parent directory exists
   ansible.builtin.file:
-    path: "{{ create_pythonenv_ansible_parent_directory }}"
+    path: "{{ create_pythonenv_ansible_user_home_directory }}/{{ create_pythonenv_ansible_parent_directory }}"
+    owner: "{{ create_pythonenv_ansible_user }}"
+    group: "{{ create_pythonenv_ansible_user }}"
+    mode: "0770"
     state: directory
 
 - name: ensure the python environment script exists
   ansible.builtin.copy:
     src: "{{ create_pythonenv_ansible_script_name }}"
-    dest: "{{ create_pythonenv_ansible_home_directory }}/{{ create_pythonenv_ansible_parent_directory }}/{{ create_pythonenv_ansible_script_name }}"
+    dest: "{{ create_pythonenv_ansible_user_home_directory }}/{{ create_pythonenv_ansible_parent_directory }}/{{ create_pythonenv_ansible_script_name }}"
     owner: "{{ create_pythonenv_ansible_user }}" 
+    group: "{{ create_pythonenv_ansible_user }}"
     mode: "0500"
 
 - name: check to see if each specified python environment exists
@@ -23,14 +26,15 @@
     "{{ create_pythonenv_ansible_versions }}"
   register: create_pythonenv_ansible_env_check
   ansible.builtin.stat:
-    path: "{{ create_pythonenv_ansible_user_home_directory }}/{{ create_pythonenv_ansible_parent_directory }}/pythonenv-ansible-v{{ item['version'] }}"
+    path: "{{ create_pythonenv_ansible_user_home_directory }}/{{ create_pythonenv_ansible_parent_directory }}/pythonenv-ansible-v{{ item['version'] }}-env"
     get_attributes: true
 
 - name: ensure each python environment exists
+  debugger: on_failed
   loop:
     "{{ create_pythonenv_ansible_versions }}"
   loop_control:
     index_var: create_pythonenv_ansible_index_var
-  when: create_pythonenv_ansible_index_var['results'][index_var]['exists'] == false
+  when: create_pythonenv_ansible_env_check['results'][create_pythonenv_ansible_index_var]['stat']['exists'] == false
   ansible.builtin.shell:
-   cmd: "{{ create_pythonenv_ansible_user_home_directory }}/{{ create_pythonenv_ansible_parent_directory }}/create_pythonenv_ansible_script_name"
+   cmd: "{{ create_pythonenv_ansible_user_home_directory }}/{{ create_pythonenv_ansible_parent_directory }}/{{ create_pythonenv_ansible_script_name }} {{ item['version'] }} {{ create_pythonenv_ansible_user_home_directory }}/{{ create_pythonenv_ansible_parent_directory }}"

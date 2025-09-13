@@ -1,11 +1,13 @@
 ---
 - name: ensure needed variables exist
   ansible.builtin.assert:
-    that: create_pythonenv_ansible_parent_directory
-      and create_pythonenv_ansible_versions
-      and create_pythonenv_ansible_home_directory
-      and create pythonenv_ansible_user
-    fail_msg: "Make sure the following variables exist >
+    that: 
+      - create_pythonenv_ansible_parent_directory is defined
+      - create_pythonenv_ansible_versions is defined
+      - create_pythonenv_ansible_user_home_directory is defined
+      - create_pythonenv_ansible_user is defined
+    fail_msg: >
+      "Make sure the following variables exist
       create_pythonenv_ansible_parent_directory,
       create_pythonenv_ansible_versions,
       create_pythonenv_ansible_home_directory,

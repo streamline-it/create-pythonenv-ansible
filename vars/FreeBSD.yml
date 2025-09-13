@@ -1,3 +1,2 @@
 ---
-create_pythonenv_ansible_script_name: pythonenv-install-ansible_fbsd.sh
-
+create_pythonenv_ansible_script_name: pythonenv-install-ansible-fbsd.sh
