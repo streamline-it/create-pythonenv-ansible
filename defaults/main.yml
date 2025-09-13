@@ -6,7 +6,7 @@
 create_pythonenv_ansible_versions:
   - version:
 
-create_pythonenv_ansible_parent_directory: 
+create_pythonenv_ansible_parent_directory: pythonenv
 
 create_pythonenv_ansible_user:
 
