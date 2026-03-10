@@ -67,3 +67,13 @@ Example Playbook
   roles:
 
     - name: create-pythonenv-ansible
+
+License
+-------
+
+BSD
+
+Author Information
+------------------
+
+Rich O'Hara
