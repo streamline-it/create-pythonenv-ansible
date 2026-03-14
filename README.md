@@ -60,7 +60,7 @@ Example Playbook
 
     create_pythonenv_ansible_parent_directory: pythonenv
 
-    create_pythonenv_ansible_user: user: rich
+    create_pythonenv_ansible_user: rich
 
     create_pythonenv_ansible_user_home_directory: /home/rich
 
